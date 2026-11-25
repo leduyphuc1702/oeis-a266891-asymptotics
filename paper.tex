@@ -1,0 +1,171 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\oeis}[1]{\href{https://oeis.org/#1}{\texttt{#1}}}
+
+\title{Asymptotics of the Coefficients of $\prod_{k\ge1}(1+kx^k)^k$:\\
+Proof of Kotesovec's Conjecture for OEIS A266891}
+
+\author{Le Duy Phuc\thanks{Email: \href{mailto:leduyphuc1702@gmail.com}{\texttt{leduyphuc1702@gmail.com}}}}
+\date{November 25, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $a(n)=[x^n]\prod_{k\ge1}(1+kx^k)^k$ (\oeis{A266891}). Vaclav Kotesovec conjectured in 2018 that $\log a(n)\sim n^{2/3}(2\log(3n)-3)/(4\cdot3^{1/3})$. We prove
+\[
+ \log a(n)=\frac{n^{2/3}\bigl(2\log(3n)-3\bigr)}{4\cdot 3^{1/3}}+O\Bigl(\frac{n^{2/3}}{\log n}\Bigr),
+\]
+so the relative error is $O(1/\log^2 n)$. The two terms of the main part are of different orders, and each is determined. We also prove the sharper statement $\log a(n)=\min_{s>0}\bigl(sn+\log\prod_k(1+ke^{-sk})^k\bigr)+O(n^{1/3}\sqrt{\log n})$, and give numerical evidence, from the exact coefficients up to $n=10^4$, that the saddle-point formula with its Gaussian factor is asymptotically exact.
+\end{abstract}
+
+\noindent\textbf{MSC 2020:} 05A16, 11P82, 41A60.\\
+\textbf{Keywords:} weighted partitions, saddle-point method, exponential tilting, OEIS A266891.
+
+\section{Introduction and results}
+
+Write
+\[
+ \sum_{n\ge0}a(n)x^n=\prod_{k\ge1}(1+kx^k)^k,\qquad a(n)=\sum_{\substack{0\le j_k\le k\\ \sum_k kj_k=n}}\ \prod_k\binom k{j_k}k^{j_k}.
+\]
+The sequence begins $1,1,4,13,29,81,188,456,1030,\ldots$ For each $K$ let
+\[
+ S_K=\sum_{k=1}^Kk^2,\qquad M_K=\prod_{k=1}^Kk^k ,
+\]
+and for $n\ge1$ let $K=K(n)$ be the largest integer with $S_K\le n$. Then $K=(3n)^{1/3}+O(1)$, and Euler--Maclaurin gives $\log M_K=\tfrac12K^2\log K-\tfrac14K^2+O(K\log K)$.
+
+\begin{theorem}\label{thm:main}
+As $n\to\infty$,
+\[
+ \log M_K-O(K\log K)\ \le\ \log a(n)\ \le\ \log M_K+O\Bigl(\frac{K^2}{\log K}\Bigr).
+\]
+Consequently
+\[
+ \log a(n)=\frac{n^{2/3}\bigl(2\log(3n)-3\bigr)}{4\cdot3^{1/3}}+O\Bigl(\frac{n^{2/3}}{\log n}\Bigr).
+\]
+\end{theorem}
+
+The second statement follows from the first by substituting $K^2=(3n)^{2/3}+O(n^{1/3})$ and $\log K=\frac13\log(3n)+O(n^{-1/3})$ in $\frac12K^2\log K-\frac14K^2$, using $3^{2/3}/12=1/(4\cdot 3^{1/3})$. It proves Kotesovec's conjecture.
+
+Let
+\[
+ Z(s)=\prod_{k\ge1}(1+ke^{-sk})^k,\qquad \Phi_n(s)=sn+\log Z(s)\qquad(s>0).
+\]
+
+\begin{theorem}\label{thm:saddle}
+As $n\to\infty$, $\log a(n)=\min_{s>0}\Phi_n(s)+O(n^{1/3}\sqrt{\log n})$.
+\end{theorem}
+
+Since the gap between the two bounds in Theorem~\ref{thm:main} has order $n^{2/3}/\log n$, Theorem~\ref{thm:saddle} reduces the remaining question to the analysis of the explicit function $\Phi_n$. The numerical data in Section~\ref{sec:num} suggest more:
+
+\begin{conjecture}\label{conj}
+$a(n)\sim e^{\Phi_n(s_n)}/\sqrt{2\pi V(s_n)}$, where $s_n$ is the minimiser of $\Phi_n$ and $V(s)=\sum_k k^3p_k(1-p_k)$ with $p_k=ke^{-sk}/(1+ke^{-sk})$.
+\end{conjecture}
+
+\section{Proof of Theorem~\ref{thm:main}}
+
+\emph{Lower bound.} Take the top term $(kx^k)^k$, of coefficient $k^k$ and degree $k^2$, from every factor with $k\le K-1$. The remaining degree $R=n-S_{K-1}$ satisfies $R\ge K^2>K-1$, so the factor $(1+Rx^R)^R$ has not been used; take from it the term $\binom R1Rx^R$. All other factors contribute $1$. All coefficients being nonnegative, $a(n)\ge M_{K-1}R^2\ge M_{K-1}$, and $\log M_{K-1}=\log M_K-K\log K$.
+
+\emph{Upper bound.} Nonnegativity gives $a(n)\le e^{tn}Z(t)$ for every $t>0$. Take $t=\log K/K$ and write $u_k=\log k-tk$, so that $\log(1+ke^{-tk})=\log(1+e^{u_k})=\max(u_k,0)+\log(1+e^{-|u_k|})$. As a function of real $k>0$, $u$ is concave, increases up to $k=1/t$ and decreases afterwards, and $u(K)=0$. Hence $u_k\ge0$ for $3\le k\le K$ (for large $K$), $u_k<0$ for $k>K$, and $u_1=-t$, $u_2=\log2-2t>0$. Therefore
+\[
+ \log a(n)\le tn+\sum_{k=2}^Kk(\log k-tk)+E_K=\log M_K+t(n-S_K)+t+E_K,\qquad E_K=\sum_{k\ge1}k\log\bigl(1+e^{-|u_k|}\bigr).
+\]
+Here $0\le n-S_K<(K+1)^2$, so $t(n-S_K)=O(K\log K)$. It remains to show $E_K=O(K^2/\log K)$; we use $\log(1+e^{-|u|})\le e^{-|u|}$.
+\begin{itemize}
+\item $k\le2$: contributes $O(1)$.
+\item $3\le k\le1/t$: here $tk\le1$, so $u_k\ge\log k-1$ and $ke^{-u_k}\le e$; the total is $O(1/t)=O(K/\log K)$.
+\item $1/t\le k\le K$: by concavity $u_k\ge\lambda(K-k)$ with $\lambda=u(1/t)/(K-1/t)\ge(\log K-\log\log K-1)/K$, so the contribution is at most $K\sum_{m\ge0}e^{-\lambda m}=O(K/\lambda)=O(K^2/\log K)$.
+\item $k>K$: by concavity $u_k\le u'(K)(k-K)=-\lambda'(k-K)$ with $\lambda'=t-1/K=(\log K-1)/K$, so the contribution is at most $\sum_{m\ge1}(K+m)e^{-\lambda'm}=O(K/\lambda'+1/\lambda'^2)=O(K^2/\log K)$.
+\end{itemize}
+This proves Theorem~\ref{thm:main}. \qed
+
+\begin{remark}
+The estimate for $E_K$ is sharp in order: the terms with $|k-K|\lesssim K/\log K$ contribute $\sim 2K\cdot\frac{K}{\log K}\int_0^\infty\log(1+e^{-y})\,dy=\frac{\pi^2}{6}\frac{K^2}{\log K}$. This is the source of the second-order term, and we expect $\log a(n)=\log M_K+(\frac{\pi^2}{6}+o(1))K^2/\log K$, but the upper and lower bounds above do not prove it.
+\end{remark}
+
+\section{Proof of Theorem~\ref{thm:saddle}}
+
+The upper bound $\log a(n)\le\min_s\Phi_n(s)$ is immediate from $a(n)\le e^{sn}Z(s)$. For the lower bound we use a tilted probability measure. For $s>0$ let $j_k$, $k\ge1$, be independent with $j_k\sim\mathrm{Binomial}(k,p_k)$, $p_k=ke^{-sk}/(1+ke^{-sk})$. Then a configuration $c=(j_k)$ has probability $\mathbb P_s(c)=w(c)e^{-sN(c)}/Z(s)$, where $w(c)=\prod_k\binom k{j_k}k^{j_k}$ and $N(c)=\sum_kkj_k$, which is finite almost surely. Put
+\[
+ m(s)=\mathbb E_sN=\sum_kk^2p_k,\qquad v(s)=\operatorname{Var}_sN=\sum_kk^3p_k(1-p_k).
+\]
+
+\begin{lemma}\label{lem:scales}
+For $0<s<1/e$ let $\kappa=\kappa(s)$ be the unique solution of $\log\kappa=s\kappa$ in $(1/s,\infty)$. As $s\to0$ we have $\kappa\to\infty$ and
+\[
+ \kappa^3/7\le m(s)\le\kappa^3,\qquad v(s)=O\bigl(\kappa^4/\log\kappa\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+Let $u_k=\log k-sk$, so that $p_k=e^{u_k}/(1+e^{u_k})$ and $p_k(1-p_k)\le e^{-|u_k|}$. As before $u_k\ge0$ for $3\le k\le\kappa$, so $p_k\ge\frac12$ there and $m(s)\ge\frac12\sum_{3\le k\le\kappa}k^2\ge\kappa^3/7$ for large $\kappa$. Concavity gives $u_k\le-\lambda'(k-\kappa)$ for $k>\kappa$, with $\lambda'=s-1/\kappa=(\log\kappa-1)/\kappa$, hence
+\[
+ m(s)\le\sum_{k\le\kappa}k^2+\sum_{m\ge1}(\kappa+m)^2e^{-\lambda'm}\le\frac{\kappa^3}3+O\Bigl(\kappa^2+\frac{\kappa^2}{\lambda'}+\frac1{\lambda'^3}\Bigr)\le\kappa^3 .
+\]
+For $v$, split as in the proof of Theorem~\ref{thm:main} with weights $k^3$: $k\le2$ gives $O(1)$; $3\le k\le1/s$ gives $\sum k^3\cdot e/k=O(s^{-3})=O(\kappa^3)$; $1/s\le k\le\kappa$ gives at most $\kappa^3\sum_{m\ge0}e^{-\lambda m}$ with $\lambda\ge(\log\kappa-\log\log\kappa-1)/\kappa$, i.e.\ $O(\kappa^4/\log\kappa)$; and $k>\kappa$ gives $\sum_{m\ge1}(\kappa+m)^3e^{-\lambda'm}=O(\kappa^4/\log\kappa)$.
+\end{proof}
+
+\begin{proof}[Proof of the lower bound]
+Let $n$ be large and $W(s)=\max\bigl(2\sqrt{v(s)},\sqrt n\bigr)$. The function $h(s)=m(s)+\frac32W(s)-n$ is continuous on $(0,\infty)$ (the series converge locally uniformly), tends to $+\infty$ as $s\to0$, and is negative for all $s\ge s_1$ if $s_1<1/e$ is fixed and $n$ is large, because $m$ and $v$ are bounded on $[s_1,\infty)$. Let $s_*$ be a zero of $h$; then $s_*<s_1$. Write $\kappa_*=\kappa(s_*)$. If $m(s_*)<n/2$ we would need $W(s_*)>n/3$, but by Lemma~\ref{lem:scales} and $\kappa_*^3\le7m(s_*)\le7n$ we have $W(s_*)=O(n^{2/3})$. Hence $m(s_*)\in[n/2,n]$, so $\kappa_*\asymp n^{1/3}$ and
+\[
+ s_*=\frac{\log\kappa_*}{\kappa_*}\asymp\frac{\log n}{n^{1/3}},\qquad W_*:=W(s_*)=O\Bigl(\frac{n^{2/3}}{\sqrt{\log n}}\Bigr).
+\]
+Let $G$ be the event that $|N-m(s_*)|\le W_*$ and $j_k=0$ for all $k\ge W_*/2$. By Chebyshev, $\mathbb P(|N-m|>W_*)\le v/W_*^2\le\frac14$. Since $p_k\le ke^{-s_*k}$ and $s_*W_*/2\ge s_*\sqrt n/2\to\infty$ faster than any power of $\log n$,
+\[
+ \mathbb P(\exists k\ge W_*/2:\ j_k\ge1)\le\sum_{k\ge W_*/2}k^2e^{-s_*k}\to0 .
+\]
+So $\mathbb P_{s_*}(G)\ge\frac12$ for large $n$. On $G$ the number $R=n-N$ lies in $[W_*/2,\frac52W_*]$ and $j_R=0$. Setting $j_R=1$ produces a configuration $c'$ with $N(c')=n$ and $w(c')=R^2w(c)\ge w(c)$. The map $c\mapsto c'$ is injective on $G$: if $c_1+e_{R_1}=c_2+e_{R_2}$ with $R_1\ne R_2$, then $c_1$ would have $j_{R_2}=1$ with $R_2\ge W_*/2$, contradicting $c_1\in G$. Therefore
+\[
+ a(n)\ge\sum_{c\in G}w(c)=Z(s_*)\,\mathbb E_{s_*}\bigl[e^{s_*N};G\bigr]\ge\tfrac12Z(s_*)\,e^{s_*(n-\frac52W_*)},
+\]
+and $\log a(n)\ge\Phi_n(s_*)-\frac52s_*W_*-\log2\ge\min_s\Phi_n(s)-O(n^{1/3}\sqrt{\log n})$.
+\end{proof}
+
+\section{Numerical evidence}\label{sec:num}
+
+The script \texttt{verify\_a266891.py} computes $a(n)$ exactly, checks it against the OEIS b-file (indices $0$ to $10^4$), and produces Table~\ref{tab:num}. The last column shows that the Gaussian-corrected saddle value of Conjecture~\ref{conj} agrees with $\log a(n)$ to better than $10^{-3}$ already for $n\ge2000$, while the main term of Theorem~\ref{thm:main} is still far off. This slow convergence of the two-term formula is expected: the next term, of order $n^{2/3}/\log n$, is only a factor $\asymp1/\log^2n$ smaller than the main part.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrr}
+\toprule
+$n$ & $K$ & $\log a(n)$ & main term & $\log M_K$ & $\min\Phi_n$ & $\log a(n)-\bigl(\min\Phi_n-\frac12\log 2\pi V\bigr)$\\
+\midrule
+100 & 6 & 59.125 & 31.398 & 29.025 & 63.403 & $-0.0075$\\
+200 & 7 & 101.257 & 58.060 & 42.646 & 105.967 & $-0.0045$\\
+500 & 10 & 203.399 & 126.958 & 102.083 & 208.682 & $-0.0022$\\
+1000 & 13 & 342.361 & 225.563 & 191.623 & 348.078 & $-0.0013$\\
+1500 & 16 & 463.340 & 313.991 & 313.552 & 469.312 & $-0.0010$\\
+2000 & 17 & 573.888 & 396.205 & 361.717 & 580.041 & $-0.0008$\\
+3000 & 20 & 775.211 & 548.414 & 529.602 & 781.619 & $-0.0006$\\
+5000 & 24 & 1130.841 & 822.699 & 809.930 & 1137.571 & $-0.0004$\\
+10000 & 30 & 1884.057 & 1417.492 & 1357.089 & 1891.223 & $-0.0002$\\
+\bottomrule
+\end{tabular}
+\caption{Exact values against the bounds and the saddle point. ``Main term'' is $n^{2/3}(2\log(3n)-3)/(4\cdot 3^{1/3})$.}\label{tab:num}
+\end{table}
+
+\section*{Acknowledgements}
+The conjecture is due to Vaclav Kotesovec; the b-file is by Seiichi Manyama and Vaclav Kotesovec. Parts of the derivation and code were developed with AI assistance; all statements were checked by the author and all computations are reproducible with the accompanying script.
+
+\begin{thebibliography}{9}
+\bibitem{OEIS} OEIS Foundation Inc., \emph{The On-Line Encyclopedia of Integer Sequences}, \url{https://oeis.org}; entry A266891.
+\bibitem{FS} P. Flajolet and R. Sedgewick, \emph{Analytic Combinatorics}, Cambridge University Press, 2009, Chapter VIII (saddle-point bounds).
+\end{thebibliography}
+
+\end{document}
